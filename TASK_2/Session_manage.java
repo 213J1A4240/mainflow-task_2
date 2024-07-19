@@ -1,0 +1,1 @@
+spring.security.session.timeout=30m

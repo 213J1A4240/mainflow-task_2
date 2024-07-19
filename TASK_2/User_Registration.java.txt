@@ -1,0 +1,28 @@
+// RegistrationController.java
+@Controller
+@RequestMapping("/register")
+public class RegistrationController {
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping
+    public String registerForm(Model model) {
+        model.addAttribute("user", new User());
+        return "register";
+    }
+
+    @PostMapping
+    public String register(@ModelAttribute User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "register";
+        }
+        user.setPassword(passwordEncoder().encode(user.getPassword()));
+        userRepository.save(user);
+        return "redirect:/login";
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
